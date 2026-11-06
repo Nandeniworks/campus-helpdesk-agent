@@ -1,0 +1,19 @@
+# environment files
+.env
+.env.*
+!.env.example
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# node
+node_modules/
+
+# macos
+.DS_Store
+
+# editor
+.vscode/
