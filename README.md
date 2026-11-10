@@ -6,17 +6,51 @@ A project for Assignment 8 – AI Tools and Prompt Engineering.
 
 This project focuses on building and auditing an AI-agent toolchain for a university campus helpdesk scenario.
 
+It demonstrates the use of Agent Skills, plugins, the Model Context Protocol (MCP), and Git worktrees.
+
+## Project Structure
+
+```text
+campus-helpdesk-agent/
+├── campus-helpdesk/
+│   ├── data/
+│   │   └── mock/
+│   ├── skills/
+│   │   └── timetable-helper/
+│   │       ├── references/
+│   │       └── scripts/
+│   ├── plugin/
+│   │   └── campus-helpdesk/
+│   │       ├── commands/
+│   │       └── hooks/
+│   └── mcp-server/
+│       └── tests/
+├── tests/
+├── evidence/
+│   ├── skill/
+│   ├── plugin/
+│   ├── mcp/
+│   └── worktrees/
+├── prompt-log/
+├── README.md
+└── .gitignore
+```
+
 ## Main Components
 
 - Agent Skills
-- Plugin
+- Campus Helpdesk Plugin
 - Model Context Protocol (MCP) Server
 - Git Worktrees
 
-## Data
+## Data and Security
 
-This project uses mock campus data only. No real student information, passwords or API keys are included.
+This project uses mock campus data only. No real student information, passwords, or API keys are included.
 
-## Status
+## Evidence and Testing
 
-Project setup in progress.
+Test results, screenshots, and implementation evidence will be maintained in the `evidence/` and `tests/` directories.
+
+## Project Status
+
+Repository structure established. Implementation is in progress.
