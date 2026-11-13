@@ -1,0 +1,5 @@
+student_id,student_name,batch,total_fee,amount_paid,pending_dues,payment_status,due_date
+STU001,Aarav Sharma,CSE-A,150000,150000,0,PAID,2026-08-15
+STU002,Diya Patel,CSE-A,150000,100000,50000,PARTIAL,2026-12-01
+STU003,Rohan Verma,CSE-B,150000,0,150000,PENDING,2026-11-30
+STU004,Ananya Iyer,CSE-B,150000,150000,0,PAID,2026-08-15

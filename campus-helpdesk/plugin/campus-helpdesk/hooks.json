@@ -1,0 +1,17 @@
+{
+  "protected-directory-guard": {
+    "enabled": true,
+    "PreToolUse": [
+      {
+        "matcher": "run_command|write_file|edit_file",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ./hooks/protect_folder.py",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

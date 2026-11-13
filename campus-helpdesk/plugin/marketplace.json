@@ -1,0 +1,27 @@
+{
+  "$schema": "https://antigravity.google.com/schemas/marketplace-v1.json",
+  "name": "campus-helpdesk-marketplace",
+  "description": "Campus Helpdesk Agent Marketplace Catalog",
+  "plugins": [
+    {
+      "id": "campus-helpdesk",
+      "name": "campus-helpdesk",
+      "displayName": "Campus Helpdesk Plugin",
+      "version": "1.0.0",
+      "description": "Unified campus assistant bundling timetable skills, security write-protection hooks, custom slash commands, and campus MCP tools.",
+      "author": {
+        "name": "Nimbus Labs Helpdesk Team"
+      },
+      "homepage": "https://github.com/nimbus-labs/campus-helpdesk",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/nimbus-labs/campus-helpdesk.git"
+      },
+      "tags": ["campus", "timetable", "helpdesk", "mcp", "security-hooks"],
+      "skills": ["timetable-helper"],
+      "commands": ["check-timetable"],
+      "mcpServers": ["campus-helpdesk-mcp"],
+      "downloadUrl": "./campus-helpdesk"
+    }
+  ]
+}

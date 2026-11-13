@@ -1,0 +1,14 @@
+{
+  "name": "campus-helpdesk",
+  "displayName": "Campus Helpdesk Plugin",
+  "description": "Unified campus assistant bundling timetable skills, security write-protection hooks, custom slash commands, and campus MCP tools.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Nimbus Labs Helpdesk Team"
+  },
+  "suggestedPrompts": [
+    "What classes does CSE-A have on Monday?",
+    "Check timetable for CSE-B on Tuesday",
+    "/check-timetable CSE-A Monday"
+  ]
+}

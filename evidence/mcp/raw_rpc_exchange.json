@@ -1,0 +1,266 @@
+[
+  {
+    "step": "initialize",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "method": "initialize",
+      "params": {
+        "protocolVersion": "2024-11-05",
+        "capabilities": {
+          "tools": {},
+          "resources": {}
+        },
+        "clientInfo": {
+          "name": "campus-helpdesk-test-client",
+          "version": "1.0.0"
+        }
+      }
+    },
+    "response": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "result": {
+        "capabilities": {
+          "prompts": {
+            "listChanged": false
+          },
+          "resources": {
+            "listChanged": false,
+            "subscribe": false
+          },
+          "tools": {
+            "listChanged": false
+          }
+        },
+        "protocolVersion": "2024-11-05",
+        "serverInfo": {
+          "description": "Provides real-time campus data including batch timetables, student fee ledgers, and hostel regulations.",
+          "name": "campus-helpdesk-mcp",
+          "title": "Campus Helpdesk Information Server",
+          "version": ""
+        }
+      }
+    }
+  },
+  {
+    "step": "tools/list",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": 2,
+      "method": "tools/list",
+      "params": {}
+    },
+    "response": {
+      "jsonrpc": "2.0",
+      "id": 2,
+      "result": {
+        "tools": [
+          {
+            "description": "Retrieve the scheduled classes for a specific academic student batch and day of the week from verified campus records.",
+            "inputSchema": {
+              "properties": {
+                "batch": {
+                  "title": "Batch",
+                  "type": "string"
+                },
+                "day": {
+                  "title": "Day",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "batch",
+                "day"
+              ],
+              "type": "object",
+              "title": "get_timetableArguments"
+            },
+            "name": "get_timetable",
+            "outputSchema": {
+              "properties": {
+                "result": {
+                  "title": "Result",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "result"
+              ],
+              "type": "object",
+              "title": "get_timetableOutput"
+            }
+          },
+          {
+            "description": "Look up college fee payment status, total dues, amount paid, and balance for an enrolled student by their Student ID.",
+            "inputSchema": {
+              "properties": {
+                "student_id": {
+                  "title": "Student Id",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "student_id"
+              ],
+              "type": "object",
+              "title": "get_fee_statusArguments"
+            },
+            "name": "get_fee_status",
+            "outputSchema": {
+              "properties": {
+                "result": {
+                  "title": "Result",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "result"
+              ],
+              "type": "object",
+              "title": "get_fee_statusOutput"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "step": "resources/list",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": 3,
+      "method": "resources/list",
+      "params": {}
+    },
+    "response": {
+      "jsonrpc": "2.0",
+      "id": 3,
+      "result": {
+        "resources": [
+          {
+            "description": "Official university regulations regarding hostel residency, night curfew timings, visitor protocols, and room policies.",
+            "mimeType": "text/markdown",
+            "name": "Campus Hostel Rules and Regulations",
+            "uri": "hostel://rules"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "step": "resources/read",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": 4,
+      "method": "resources/read",
+      "params": {
+        "uri": "hostel://rules"
+      }
+    },
+    "response": {
+      "jsonrpc": "2.0",
+      "id": 4,
+      "result": {
+        "contents": [
+          {
+            "mimeType": "text/markdown",
+            "text": "# University Campus Hostel Rules and Regulations\n\n## 1. General Conduct\n* Resident students must maintain high standards of discipline, decorum, and mutual respect.\n* Possession or consumption of alcoholic beverages, narcotics, and tobacco products on campus premises is strictly prohibited.\n* Ragging in any form is a criminal offense under national law and university regulations.\n\n## 2. Curfew and Entry Timings\n* **Night Curfew**: The hostel main gates are locked strictly at **21:30 (9:30 PM)**.\n* **Late Return**: Any entry between 21:30 and 22:30 requires prior written sanction from the Assistant Warden.\n* **Night Out / Leave Passes**: Students intending to stay overnight outside the hostel must submit an online e-gate pass signed by their registered parent/guardian at least 24 hours in advance.\n\n## 3. Visitors and Guest Policy\n* **Visiting Hours**: Approved visitors may visit between **16:00 and 19:00** on weekdays and **10:00 to 18:00** on weekends/public holidays.\n* Visitors must register at the main security post and are restricted to common reception lounges.\n* No outside visitor or day-scholar student is permitted inside student residential rooms under any circumstances.\n* Overnight stays for immediate family (parents) in university guest houses require advance reservation through the Chief Warden's Office.\n\n## 4. Room Allocation and Facilities\n* Electrical appliances such as immersion heaters, induction stoves, and high-wattage room heaters are prohibited in individual rooms.\n* High-speed campus Wi-Fi is monitored for academic use; peer-to-peer torrenting is blocked.\n* Rooms, corridors, and washrooms are inspected weekly by the hostel administration.\n",
+            "uri": "hostel://rules"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "step": "tools/call (get_timetable)",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": 5,
+      "method": "tools/call",
+      "params": {
+        "name": "get_timetable",
+        "arguments": {
+          "batch": "CSE-A",
+          "day": "Monday"
+        }
+      }
+    },
+    "response": {
+      "jsonrpc": "2.0",
+      "id": 5,
+      "result": {
+        "content": [
+          {
+            "text": "Timetable for CSE-A on Monday:\n- Python Programming: 09:00 - 10:00 (Room: Lab 1, Faculty: Faculty A)\n- Mathematics: 10:00 - 11:00 (Room: Room 201, Faculty: Faculty B)\n- Database Systems: 11:30 - 12:30 (Room: Room 202, Faculty: Faculty C)",
+            "type": "text"
+          }
+        ],
+        "isError": false,
+        "structuredContent": {
+          "result": "Timetable for CSE-A on Monday:\n- Python Programming: 09:00 - 10:00 (Room: Lab 1, Faculty: Faculty A)\n- Mathematics: 10:00 - 11:00 (Room: Room 201, Faculty: Faculty B)\n- Database Systems: 11:30 - 12:30 (Room: Room 202, Faculty: Faculty C)"
+        }
+      }
+    }
+  },
+  {
+    "step": "tools/call (get_fee_status success)",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": 6,
+      "method": "tools/call",
+      "params": {
+        "name": "get_fee_status",
+        "arguments": {
+          "student_id": "STU001"
+        }
+      }
+    },
+    "response": {
+      "jsonrpc": "2.0",
+      "id": 6,
+      "result": {
+        "content": [
+          {
+            "text": "Fee Status for Aarav Sharma (ID: STU001):\n- Batch: CSE-A\n- Total Fee: \u20b9150,000\n- Amount Paid: \u20b9150,000\n- Pending Dues: \u20b90\n- Payment Status: PAID\n- Due Date: 2026-08-15",
+            "type": "text"
+          }
+        ],
+        "isError": false,
+        "structuredContent": {
+          "result": "Fee Status for Aarav Sharma (ID: STU001):\n- Batch: CSE-A\n- Total Fee: \u20b9150,000\n- Amount Paid: \u20b9150,000\n- Pending Dues: \u20b90\n- Payment Status: PAID\n- Due Date: 2026-08-15"
+        }
+      }
+    }
+  },
+  {
+    "step": "tools/call (get_fee_status error)",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": 7,
+      "method": "tools/call",
+      "params": {
+        "name": "get_fee_status",
+        "arguments": {
+          "student_id": "INVALID_999"
+        }
+      }
+    },
+    "response": {
+      "jsonrpc": "2.0",
+      "id": 7,
+      "result": {
+        "content": [
+          {
+            "text": "Error: Invalid student ID format 'INVALID_999'. Expected format is 'STU' followed by 3 digits (e.g., 'STU001').",
+            "type": "text"
+          }
+        ],
+        "isError": false,
+        "structuredContent": {
+          "result": "Error: Invalid student ID format 'INVALID_999'. Expected format is 'STU' followed by 3 digits (e.g., 'STU001')."
+        }
+      }
+    }
+  }
+]

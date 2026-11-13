@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "campus-helpdesk-mcp": {
+      "command": "python3",
+      "args": ["-m", "campus_helpdesk_server"],
+      "cwd": "${PLUGIN_ROOT}/../../mcp-server",
+      "env": {
+        "PYTHONUNBUFFERED": "1"
+      }
+    }
+  }
+}
