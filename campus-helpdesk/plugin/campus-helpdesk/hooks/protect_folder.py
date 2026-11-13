@@ -73,3 +73,4 @@ def check_tool_call():
 
 if __name__ == "__main__":
     check_tool_call()
+# Path normalization patch
