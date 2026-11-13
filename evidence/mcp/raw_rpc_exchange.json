@@ -38,7 +38,7 @@
           "description": "Provides real-time campus data including batch timetables, student fee ledgers, and hostel regulations.",
           "name": "campus-helpdesk-mcp",
           "title": "Campus Helpdesk Information Server",
-          "version": ""
+          "version": "1.0.0"
         }
       }
     }

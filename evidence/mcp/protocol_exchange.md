@@ -35,21 +35,25 @@ This document provides the annotated JSON-RPC 2.0 protocol traces captured from 
   "jsonrpc": "2.0",
   "id": 1,
   "result": {
-    "protocolVersion": "2024-11-05",
     "capabilities": {
-      "tools": {
+      "prompts": {
         "listChanged": false
       },
       "resources": {
-        "subscribe": false,
+        "listChanged": false,
+        "subscribe": false
+      },
+      "tools": {
         "listChanged": false
       }
     },
+    "protocolVersion": "2024-11-05",
     "serverInfo": {
+      "description": "Provides real-time campus data including batch timetables, student fee ledgers, and hostel regulations.",
       "name": "campus-helpdesk-mcp",
-      "version": "2.3.0"
-    },
-    "instructions": "Provides real-time campus data including batch timetables, student fee ledgers, and hostel regulations."
+      "title": "Campus Helpdesk Information Server",
+      "version": "1.0.0"
+    }
   }
 }
 ```

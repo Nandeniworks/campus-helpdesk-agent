@@ -15,6 +15,7 @@ from mcp.server.mcpserver import MCPServer
 app = MCPServer(
     name="campus-helpdesk-mcp",
     title="Campus Helpdesk Information Server",
+    version="1.0.0",
     description="Provides real-time campus data including batch timetables, student fee ledgers, and hostel regulations."
 )
 

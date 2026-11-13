@@ -37,8 +37,13 @@ def get_timetable(batch, day):
 
 
 if __name__ == "__main__":
-    batch = input("Enter batch: ").strip()
-    day = input("Enter day: ").strip()
+    import sys
+    if len(sys.argv) >= 3:
+        batch = sys.argv[1].strip()
+        day = sys.argv[2].strip()
+    else:
+        batch = input("Enter batch: ").strip()
+        day = input("Enter day: ").strip()
 
     timetable = get_timetable(batch, day)
 
