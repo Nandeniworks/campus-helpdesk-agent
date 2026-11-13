@@ -17,3 +17,6 @@ node_modules/
 
 # editor
 .vscode/
+
+# git worktrees
+.worktrees/
