@@ -1,0 +1,14 @@
+
+batch,day,start_time,end_time,subject,room,faculty
+CSE-A,Monday,09:00,10:00,Python Programming,Lab 1,Faculty A
+CSE-A,Monday,10:00,11:00,Mathematics,Room 201,Faculty B
+CSE-A,Monday,11:30,12:30,Database Systems,Room 202,Faculty C
+CSE-A,Tuesday,09:00,10:00,Data Structures,Lab 2,Faculty D
+CSE-A,Tuesday,10:00,11:00,Computer Networks,Room 203,Faculty E
+CSE-A,Wednesday,09:00,10:00,Python Programming,Lab 1,Faculty A
+CSE-A,Wednesday,10:00,11:00,Mathematics,Room 201,Faculty B
+CSE-A,Thursday,09:00,10:00,Database Systems,Room 202,Faculty C
+CSE-A,Friday,09:00,10:00,Data Structures,Lab 2,Faculty D
+CSE-B,Monday,09:00,10:00,Computer Networks,Room 203,Faculty E
+CSE-B,Tuesday,10:00,11:00,Mathematics,Room 201,Faculty B
+CSE-B,Wednesday,11:30,12:30,Database Systems,Room 202,Faculty C
