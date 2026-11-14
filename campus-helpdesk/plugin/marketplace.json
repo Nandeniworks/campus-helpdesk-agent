@@ -1,7 +1,6 @@
 {
-  "$schema": "https://antigravity.google.com/schemas/marketplace-v1.json",
   "name": "campus-helpdesk-marketplace",
-  "description": "Campus Helpdesk Agent Marketplace Catalog",
+  "description": "Campus Helpdesk Agent Marketplace Catalog Entry Deliverable",
   "plugins": [
     {
       "id": "campus-helpdesk",
@@ -12,13 +11,10 @@
       "author": {
         "name": "Nimbus Labs Helpdesk Team"
       },
-      "homepage": "https://github.com/nimbus-labs/campus-helpdesk",
-      "repository": {
-        "type": "git",
-        "url": "https://github.com/nimbus-labs/campus-helpdesk.git"
-      },
+      "homepage": "https://github.com/Nandeniworks/campus-helpdesk-agent",
+      "repository": "https://github.com/Nandeniworks/campus-helpdesk-agent",
       "tags": ["campus", "timetable", "helpdesk", "mcp", "security-hooks"],
-      "skills": ["timetable-helper"],
+      "skills": ["timetable-helper", "check-timetable"],
       "commands": ["check-timetable"],
       "mcpServers": ["campus-helpdesk-mcp"],
       "downloadUrl": "./campus-helpdesk"

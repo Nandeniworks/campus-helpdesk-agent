@@ -45,14 +45,21 @@ The server listens on `stdin` for JSON-RPC 2.0 messages and outputs responses to
 
 ## Automated Protocol Verification & Testing
 
+### 1. Automated Test Client
 An automated JSON-RPC 2.0 test client is included in `tests/test_mcp_server.py`:
 ```bash
 python3 tests/test_mcp_server.py
 ```
 This script exercises:
-1. `initialize` capability negotiation.
+1. `initialize` capability negotiation (verifying only `tools` and `resources` are advertised, omitting unprovided `prompts`).
 2. `tools/list` schema validation.
 3. `resources/list` and `resources/read`.
 4. `tools/call` for `get_timetable` and `get_fee_status`.
-5. Error handling on malformed student ID inputs.
+5. Error handling on malformed student ID inputs with MCP `isError: true` semantics.
 Logs are saved to `evidence/mcp/raw_rpc_exchange.json`.
+
+### 2. Interactive MCP Inspector
+For manual inspection, use the official MCP Inspector:
+```bash
+npx @modelcontextprotocol/inspector python3 campus_helpdesk_server.py
+```

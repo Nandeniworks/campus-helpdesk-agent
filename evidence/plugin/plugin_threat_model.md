@@ -66,37 +66,66 @@ Installing third-party agent plugins introduces significant security risks becau
 
 ## 2. Plugin Lifecycle Commands & Verification Guide
 
-### Add Marketplace
-```bash
-agy plugin marketplace add ./campus-helpdesk/plugin/marketplace.json
-```
-*Verification:* The marketplace catalog is registered in `~/.gemini/config/marketplaces.json`.
+Official Google Antigravity documentation specifies the standard plugin lifecycle commands via the `agy` CLI:
 
-### Install Plugin
+### 1. Validate Plugin Manifest and Structure
 ```bash
-agy plugin install campus-helpdesk
+agy plugin validate --strict ./campus-helpdesk/plugin/campus-helpdesk
 ```
-*Verification:* The plugin files are unpacked into `.agents/plugins/campus-helpdesk/` and indexed in the active workspace.
+*Verification:* Validates `plugin.json` schema, folder layout, hook definitions, and skill frontmatter against official Antigravity specifications. (Note: `agy` CLI validation cannot be run directly on this host because `agy` is not installed on the system PATH; the command reflects the official specification).
 
-### Verify Loaded Plugin
+### 2. Install Plugin
+```bash
+agy plugin install ./campus-helpdesk/plugin/campus-helpdesk
+```
+*Verification:* Installs the plugin into the workspace or user configuration directory, activating bundled skills, hooks, and MCP server definitions.
+
+### 3. Verify Loaded Plugin
 ```bash
 agy plugin list
+# Alternatively, with JSON output:
+agy plugin list --json
 ```
 *Expected Output:*
 ```text
-campus-helpdesk    1.0.0    enabled    Campus Helpdesk Plugin [Skills: 1, Commands: 1, Hooks: 1, MCP: 1]
+campus-helpdesk    1.0.0    enabled    Campus Helpdesk Plugin [Skills: 2, Hooks: 1, MCP: 1]
 ```
 
-### Test Slash Command & Security Hook
-1. Trigger `/check-timetable CSE-A Monday` and verify schedule table output.
-2. Attempt an unauthorized write:
+### 4. Test Slash Command & Security Hook
+1. **Slash Command Execution:** Trigger `/check-timetable CSE-A Monday` and verify schedule records are retrieved from `campus-helpdesk/data/mock/timetable.csv` via the native `skills/check-timetable/SKILL.md` skill wrapper.
+2. **Security Write Guard Execution:** Test unauthorized write blocking using simulated tool-call payloads:
    ```bash
-   python3 -c "import json; open('campus-helpdesk/data/mock/timetable.csv', 'w').write('hacked')"
+   python3 campus-helpdesk/plugin/campus-helpdesk/hooks/protect_folder.py <<'EOF'
+   {"toolCall": {"name": "write_file", "args": {"Path": "campus-helpdesk/data/mock/timetable.csv"}}}
+   EOF
    ```
-   *Expected Output:* The `PreToolUse` hook blocks the operation and logs an alert.
+   *Expected Output:* The `PreToolUse` hook intercepts the payload and outputs structured JSON blocking execution:
+   ```json
+   {"decision": "deny", "reason": "Security Alert: Write operation to protected path 'campus-helpdesk/data/mock/timetable.csv' blocked by campus-helpdesk safety hook."}
+   ```
 
-### Uninstall Plugin
+### 5. Uninstall Plugin
 ```bash
 agy plugin uninstall campus-helpdesk
 ```
 *Verification:* Re-running `agy plugin list` confirms `campus-helpdesk` is removed, and all bundled hooks, commands, and MCP servers are unregistered.
+
+---
+
+## 3. Marketplace Registration & Runtime Limitations
+
+1. **Marketplace Catalog Scope:**
+   Official Google Antigravity documentation (`https://antigravity.google/docs/marketplace/`) documents installing plugins from the official public marketplace or from local paths (`agy plugin install <path>`). However, official documentation does not define a CLI command such as `agy plugin marketplace add` to register arbitrary third-party marketplace catalogs. The included `campus-helpdesk/plugin/marketplace.json` represents the project's marketplace catalog metadata entry deliverable for marketplace submission.
+
+2. **Custom Slash Command Mechanism:**
+   In Antigravity, slash commands are implemented as skills (`skills/<skill-name>/SKILL.md`) invokable as `/<skill-name>`. Antigravity ignores tool-specific command directories such as `commands/`. The command wrapper is therefore provided at `skills/check-timetable/SKILL.md`, while `commands/check-timetable.md` is preserved for legacy or cross-tool compatibility.
+
+3. **Host Environment Status:**
+   In this environment, the `agy` CLI binary is not present on the host PATH (`zsh: command not found: agy`). The lifecycle commands above reflect the canonical CLI interface documented in the official Antigravity reference documentation.
+
+---
+
+## 4. Authoritative References
+* Google Antigravity Plugin Development: `https://antigravity.google/docs/build-plugins` (Accessed: 14 November 2026)
+* Google Antigravity Marketplace: `https://antigravity.google/docs/marketplace/` (Accessed: 14 November 2026)
+* Google Antigravity Plugins Specification: `https://antigravity.google/docs/plugins` (Accessed: 14 November 2026)

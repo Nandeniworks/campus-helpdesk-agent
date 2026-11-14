@@ -2,7 +2,7 @@
 
 A complete implementation for **Assignment 8 – Building and Auditing an AI-Agent Toolchain** (AI Tools and Prompt Engineering).
 
-This project implements and audits an AI-agent toolchain for a university campus helpdesk scenario, demonstrating production-ready Agent Skills, custom plugins, the Model Context Protocol (MCP), and Git worktrees.
+This project implements and audits an AI-agent toolchain for a university campus helpdesk scenario, demonstrating Agent Skills, custom plugins, the Model Context Protocol (MCP), and Git worktrees on mock campus data.
 
 ---
 
@@ -28,9 +28,11 @@ campus-helpdesk-agent/
 │   │       ├── hooks.json                         # PreToolUse security write guard
 │   │       ├── mcp_config.json                    # MCP server integration config
 │   │       ├── README.md                          # Plugin user guide
-│   │       ├── commands/check-timetable.md        # Custom slash command definition
+│   │       ├── commands/check-timetable.md        # Tool-specific command definition (Claude Code)
 │   │       ├── hooks/protect_folder.py            # Safety hook script
-│   │       └── skills/timetable-helper/           # Bundled skill copy
+│   │       └── skills/                            # Bundled skills (invokable as slash commands)
+│   │           ├── check-timetable/               # Antigravity native /check-timetable command
+│   │           └── timetable-helper/              # Bundled timetable-helper skill
 │   └── mcp-server/                                # Part D: Model Context Protocol Server
 │       ├── campus_helpdesk_server.py              # Stdio MCP server (mcp 2.x SDK)
 │       ├── README.md                              # Run & integration guide
@@ -67,9 +69,10 @@ campus-helpdesk-agent/
 * Verified against positive, negative, and ambiguous prompts, plus adversarial prompt injection attempts.
 
 ### 2. Part C: Campus Helpdesk Plugin Bundle
-* Bundles `timetable-helper` Skill, `/check-timetable` slash command, and `campus-helpdesk-mcp` server.
+* Bundles `timetable-helper` Skill, `/check-timetable` slash command (implemented via native Antigravity skill `skills/check-timetable/SKILL.md` while retaining `commands/check-timetable.md` for tool-specific compatibility), and `campus-helpdesk-mcp` server.
 * Implements a `PreToolUse` safety hook (`hooks.json` + `hooks/protect_folder.py`) that hard-blocks unauthorized modifications to protected campus records.
 * Includes threat modeling covering prompt injection through skills, malicious hooks, and MCP tool description poisoning.
+* Documents supported lifecycle commands (`agy plugin validate --strict`, `install`, `list`, `uninstall`) and notes marketplace catalog registration limitations per official documentation.
 * Detects and avoids the adversarial honeypot ("NimbusSync Plugin Standard v4.2").
 
 ### 3. Part D: Model Context Protocol (MCP) Server

@@ -6,6 +6,8 @@
   "author": {
     "name": "Nimbus Labs Helpdesk Team"
   },
+  "homepage": "https://github.com/Nandeniworks/campus-helpdesk-agent",
+  "repository": "https://github.com/Nandeniworks/campus-helpdesk-agent",
   "suggestedPrompts": [
     "What classes does CSE-A have on Monday?",
     "Check timetable for CSE-B on Tuesday",

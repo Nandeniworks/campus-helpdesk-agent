@@ -44,7 +44,7 @@ The CTO's briefing note contains ten factual and technical claims concerning the
 
 | Claim No. | Topic / Primitive | Source Title Recorded in DOCX | Source URL (Original vs. Replacement) | Citation Status | Access Date |
 |:---:|---|---|---|:---:|:---:|
-| **1** | MCP Architecture & Primitives | Model Context Protocol Specification (Revision 2026-07-28) | • `https://modelcontextprotocol.io/specification/2026-07-28`<br>• `https://modelcontextprotocol.io/specification/2026-07-28/server`<br>• `https://modelcontextprotocol.io/specification/2026-07-28/server/tools`<br>• `https://modelcontextprotocol.io/specification/2026-07-28/server/resources` | **Original Documented URLs Preserved** | **Access date not recorded in original evidence** |
+| **1** | MCP Architecture & Primitives | Model Context Protocol Specification (Revision 2026-07-28) | • `https://modelcontextprotocol.io/specification/2026-07-28`<br>• `https://modelcontextprotocol.io/specification/2026-07-28/server`<br>• `https://modelcontextprotocol.io/specification/2026-07-28/server/tools`<br>• `https://modelcontextprotocol.io/specification/2026-07-28/server/resources` | **Original Documented URLs Preserved** | **6 November 2026** |
 | **2** | MCP Server Lifecycle & State | MCP Specification: Server Lifecycle & Transports | `https://spec.modelcontextprotocol.io/specification/server/` | *Newly verified replacement URL* | **6 November 2026** |
 | **3** | Skill Progressive Disclosure | Agent Skills Architecture & Progressive Disclosure | `https://docs.anthropic.com/en/docs/agents-and-tools/agent-skills` | *Newly verified replacement URL* | **6 November 2026** |
 | **4** | Skill Structure & Frontmatter | Agent Skills Specification: Skill Structure & Frontmatter | `https://docs.anthropic.com/en/docs/agents-and-tools/agent-skills` | *Newly verified replacement URL* | **6 November 2026** |
@@ -105,11 +105,12 @@ Two alternative descriptions were evaluated to observe triggering behavior:
 
 ### 1. Plugin Bundle Structure
 The plugin bundle is located at `campus-helpdesk/plugin/campus-helpdesk/` and includes:
-* **Manifest (`plugin.json`)**: Configured to match the Antigravity plugin manifest specification.
-* **Slash Command (`commands/check-timetable.md`)**: Defines `/check-timetable <BATCH> <DAY>`.
+* **Manifest (`plugin.json`)**: Configured to match the Antigravity plugin manifest specification with package metadata (`version: 1.0.0`, author: Nimbus Labs Helpdesk Team, repository, homepage).
+* **Custom Slash Command (`skills/check-timetable/SKILL.md` & `commands/check-timetable.md`)**: In Google Antigravity, slash commands are supported via bundled skills invokable directly as `/<skill-name>` (`/check-timetable <BATCH> <DAY>`). The repository also retains `commands/check-timetable.md` for tool-specific / Claude Code compatibility, noting that Antigravity ignores `commands/` per official documentation.
+* **Agent Skills**: `timetable-helper` for schedule queries and `check-timetable` for the direct slash command wrapper.
 * **Security Hook (`hooks.json` & `hooks/protect_folder.py`)**: A `PreToolUse` lifecycle hook that inspects file-writing tool calls and blocks modifications targeting protected files under `campus-helpdesk/data/mock/`.
 * **MCP Configuration (`mcp_config.json`)**: Configures the stdio connection to the Python MCP server.
-* **Marketplace Entry (`marketplace.json`)**: Catalog metadata for installation.
+* **Marketplace Entry (`marketplace.json`)**: Catalog metadata entry deliverable for marketplace submission.
 
 ### 2. Third-Party Plugin Threat Model
 *(Detailed analysis in `evidence/plugin/plugin_threat_model.md`)*
@@ -125,7 +126,7 @@ The threat model assesses risks when installing third-party agent plugins:
 2. **Malicious Lifecycle Hooks:**
    * *Threat:* Untrusted hook scripts executing arbitrary shell commands or exfiltrating data when tool events fire.
    * *Mitigation Status:*
-     - **Implemented & Tested:** A Python `PreToolUse` write-gate (`hooks/protect_folder.py`) that inspects tool arguments and exits with status 1 to block unauthorized writes to mock data.
+     - **Implemented & Tested:** A Python `PreToolUse` write-gate (`hooks/protect_folder.py`) that inspects incoming tool-call JSON payloads via stdio and returns structured `{"decision": "deny", "reason": "..."}` responses to block unauthorized writes to mock data.
      - **Proposed / Recommended:** Interactive confirmation prompts before running newly installed hooks and sandboxed execution for hook scripts.
 
 3. **Tool Poisoning via MCP Descriptions:**
@@ -133,6 +134,12 @@ The threat model assesses risks when installing third-party agent plugins:
    * *Mitigation Status:*
      - **Analysis of Current Controls:** The server implements strict regex input validation (`^STU\d{3}$`) in `campus_helpdesk_server.py`. However, regex validation protects only against malformed input arguments; it does not detect or prevent deceptive MCP tool descriptions at registration time. No automated defense against tool poisoning is currently implemented in the plugin.
      - **Proposed / Recommended:** Static schema analysis and description linting during MCP registration, along with explicit user confirmation prompts before the agent executes sensitive tool calls or external data operations.
+
+### 3. Plugin Lifecycle Operations & Documentation
+The plugin was audited against official Google Antigravity documentation (`https://antigravity.google/docs/build-plugins`, `https://antigravity.google/docs/marketplace/`, `https://antigravity.google/docs/plugins`, accessed 14 November 2026):
+* **Supported Lifecycle Workflow:** Documented standard commands: validation (`agy plugin validate --strict <path>`), installation (`agy plugin install <path>`), verification (`agy plugin list` / `agy plugin list --json`), and uninstallation (`agy plugin uninstall campus-helpdesk`).
+* **Marketplace Catalog Scope & CLI Demonstration:** The marketplace metadata deliverable (`marketplace.json`) is present in the repository. However, official Antigravity documentation does not document an arbitrary custom marketplace registration command such as `agy plugin marketplace add`, and arbitrary marketplace registration could not be demonstrated using the available Antigravity CLI.
+* **Environment Status:** The host environment currently lacks the `agy` CLI binary (`zsh: command not found: agy`); all documented lifecycle commands reflect the official specification.
 
 ---
 
@@ -147,9 +154,10 @@ The threat model assesses risks when installing third-party agent plugins:
 
 ### 2. Protocol Verification
 *(Detailed exchange in `evidence/mcp/protocol_exchange.md`)*
-* Executed the automated test suite `campus-helpdesk/mcp-server/tests/test_mcp_server.py`.
+* Executed the automated test suite `campus-helpdesk/mcp-server/tests/test_mcp_server.py` as a programmatic test client to capture live JSON-RPC exchanges. Note on MCP Inspector: The standard interactive verification workflow with MCP Inspector (`npx @modelcontextprotocol/inspector ...`) is documented in `README.md` and `protocol_exchange.md` as an available testing tool, but was not executed in this environment; all captured evidence is derived strictly from automated Python test client execution.
 * Verified JSON-RPC 2.0 messages across `initialize`, `notifications/initialized`, `tools/list`, `resources/list`, `resources/read`, and `tools/call`.
-* Validated input error handling: Supplying an invalid student ID (`INVALID_999`) returns a structured error message rather than causing an unhandled server exception.
+* Validated capability negotiation: server advertises only implemented primitives (`tools` and `resources`) without unprovided `prompts`.
+* Validated input error handling: Supplying an invalid student ID (`INVALID_999`) returns structured error content with MCP `isError: true` semantics rather than causing an unhandled server exception.
 
 ---
 

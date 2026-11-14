@@ -22,9 +22,6 @@
       "id": 1,
       "result": {
         "capabilities": {
-          "prompts": {
-            "listChanged": false
-          },
           "resources": {
             "listChanged": false,
             "subscribe": false
@@ -76,20 +73,7 @@
               "type": "object",
               "title": "get_timetableArguments"
             },
-            "name": "get_timetable",
-            "outputSchema": {
-              "properties": {
-                "result": {
-                  "title": "Result",
-                  "type": "string"
-                }
-              },
-              "required": [
-                "result"
-              ],
-              "type": "object",
-              "title": "get_timetableOutput"
-            }
+            "name": "get_timetable"
           },
           {
             "description": "Look up college fee payment status, total dues, amount paid, and balance for an enrolled student by their Student ID.",
@@ -106,20 +90,7 @@
               "type": "object",
               "title": "get_fee_statusArguments"
             },
-            "name": "get_fee_status",
-            "outputSchema": {
-              "properties": {
-                "result": {
-                  "title": "Result",
-                  "type": "string"
-                }
-              },
-              "required": [
-                "result"
-              ],
-              "type": "object",
-              "title": "get_fee_statusOutput"
-            }
+            "name": "get_fee_status"
           }
         ]
       }
@@ -196,10 +167,7 @@
             "type": "text"
           }
         ],
-        "isError": false,
-        "structuredContent": {
-          "result": "Timetable for CSE-A on Monday:\n- Python Programming: 09:00 - 10:00 (Room: Lab 1, Faculty: Faculty A)\n- Mathematics: 10:00 - 11:00 (Room: Room 201, Faculty: Faculty B)\n- Database Systems: 11:30 - 12:30 (Room: Room 202, Faculty: Faculty C)"
-        }
+        "isError": false
       }
     }
   },
@@ -226,10 +194,7 @@
             "type": "text"
           }
         ],
-        "isError": false,
-        "structuredContent": {
-          "result": "Fee Status for Aarav Sharma (ID: STU001):\n- Batch: CSE-A\n- Total Fee: \u20b9150,000\n- Amount Paid: \u20b9150,000\n- Pending Dues: \u20b90\n- Payment Status: PAID\n- Due Date: 2026-08-15"
-        }
+        "isError": false
       }
     }
   },
@@ -256,10 +221,7 @@
             "type": "text"
           }
         ],
-        "isError": false,
-        "structuredContent": {
-          "result": "Error: Invalid student ID format 'INVALID_999'. Expected format is 'STU' followed by 3 digits (e.g., 'STU001')."
-        }
+        "isError": true
       }
     }
   }

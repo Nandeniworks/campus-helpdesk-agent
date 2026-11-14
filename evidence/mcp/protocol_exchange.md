@@ -36,9 +36,6 @@ This document provides the annotated JSON-RPC 2.0 protocol traces captured from 
   "id": 1,
   "result": {
     "capabilities": {
-      "prompts": {
-        "listChanged": false
-      },
       "resources": {
         "listChanged": false,
         "subscribe": false
@@ -187,11 +184,11 @@ This document provides the annotated JSON-RPC 2.0 protocol traces captured from 
         "text": "Error: Invalid student ID format 'INVALID_999'. Expected format is 'STU' followed by 3 digits (e.g., 'STU001')."
       }
     ],
-    "isError": false
+    "isError": true
   }
 }
 ```
-* **Annotation**: The server performs input regex validation (`^STU\d{3}$`). Rather than crashing or leaking a Python stack trace, it returns a domain-specific error message instructing the client on the correct format.
+* **Annotation**: The server performs input regex validation (`^STU\d{3}$`). Rather than crashing, leaking a Python stack trace, or silently returning a success payload, it sets `isError: true` and provides structured error content per MCP protocol error semantics.
 
 ---
 
@@ -228,3 +225,22 @@ In traditional software development, API schemas and documentation are consumed 
    Tool descriptions must be treated with the same zero-trust rigor as user inputs:
    * Descriptions must be concise, objective, and free from imperative prompt directives.
    * Sensitive parameter schemas must enforce strict structural validation (regex, enums) at the server layer rather than relying on the LLM to follow description guidelines.
+
+---
+
+## 4. Client Testing & Verification Methods
+
+The server was verified using two client methods:
+
+1. **Automated Programmatic JSON-RPC Test Client (`tests/test_mcp_server.py`):**
+   * Spawns the server as a stdio subprocess.
+   * Exercises all 8 lifecycle protocol steps: `initialize`, `notifications/initialized`, `tools/list`, `resources/list`, `resources/read`, successful `tools/call`, and error-handling `tools/call`.
+   * Captures the live wire messages directly to `evidence/mcp/raw_rpc_exchange.json`.
+   * Verifies capability negotiation (confirming the server advertises only implemented primitives: `tools` and `resources`, without unprovided `prompts`) and error handling semantics (`isError: true`).
+
+2. **Interactive MCP Inspector Interface:**
+   * Can be launched against the server using the official MCP Inspector utility:
+     ```bash
+     npx @modelcontextprotocol/inspector python3 campus-helpdesk/mcp-server/campus_helpdesk_server.py
+     ```
+   * Provides an interactive browser UI to inspect tool schemas, send ad-hoc `tools/call` requests, and read `hostel://rules` resources.
